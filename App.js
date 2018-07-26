@@ -1,5 +1,6 @@
 import React from 'react';
 import { Platform , StyleSheet, Text, View , TextInput, TouchableOpacity} from 'react-native';
+const cheerio = require('react-native-cheerio')
 
 
 
@@ -12,6 +13,10 @@ export default class App extends React.Component {
     }
   }
   onPress(){
+
+    // Promise interface
+   
+
     console.log('Pressed LOG');
   }
   onChangeText(value){
