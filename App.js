@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform , StyleSheet, Text, View , TextInput, TouchableOpacity} from 'react-native';
+import { Platform , StyleSheet, Text, View , TextInput, TouchableOpacity,WebView} from 'react-native';
 const cheerio = require('react-native-cheerio')
 
 
@@ -9,16 +9,44 @@ export default class App extends React.Component {
   constructor(){
     super();
     this.state = {
-      query:''
+      query:'',
+      uri:'',
     }
   }
-  onPress(){
 
-    // Promise interface
+
+queryAnghami(query){
+  query = query.split(' ').join('+');
+  let url = 'https://play.anghami.com/search/'+query;
+  this.setState({
+    uri:url
+  });
+
+ }
+ 
+ querySoundcloud(query){
+
+
+  let url = 'https://soundcloud.com/search?q=' + query;
+  this.setState({
+    uri:url
+  });
+
+
+ }
+ 
+ queryYoutube(query){
+
+  query = query.split(' ').join('+');
+  let url = 'https://www.youtube.com/results?search_query='+query;
+  this.setState({
+    uri:url
+  });
+ }
+ 
    
-
-    console.log('Pressed LOG');
-  }
+   
+  
   onChangeText(value){
     this.setState({
       query:value
@@ -30,30 +58,35 @@ export default class App extends React.Component {
         <View style={styles.container}>
           
           <TextInput underlineColorAndroid='#92278F' style={styles.input} placeholder="Search Song" value={this.state.textValue} 
-            onChangeText={(value)=>this.onChangeText(value)}
+            onChangeText={(value)=>this.onChangeText(value)} textAlign={'center'}
             />
           <View style={styles.appCol}>
-              <TouchableOpacity style={styles.tab1} onPress={this.onPress}>
+              <TouchableOpacity style={styles.tab1} onPress={()=>this.queryAnghami(this.state.query)}>
                 <View > 
                   <Text style={styles.whiteText}>Anghami </Text>
                 </View>
               </TouchableOpacity>
           
 
-              <TouchableOpacity style={styles.tab2} onPress={this.onPress}>
+              <TouchableOpacity style={styles.tab2} onPress={()=>this.querySoundcloud(this.state.query)}>
                 <View > 
                   <Text style={styles.whiteText} >Soundcloud </Text>
                 </View>
               </TouchableOpacity>
 
-            <TouchableOpacity style={styles.tab3} onPress={this.onPress}>
+            {/* <TouchableOpacity style={styles.tab3} onPress={()=>this.queryYoutube(this.state.query)}>
                 <View > 
-                  <Text style={styles.whiteText}> Spotify </Text>
+                  <Text style={styles.whiteText}> Youtube </Text>
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
           </View>
         
+
+          <WebView
+          source={{uri: this.state.uri }}
+          style={styles.webView}
+        />
         </View>
      
     );
@@ -86,7 +119,7 @@ const styles = StyleSheet.create({
   },
   tab3 :{
     flex:1,
-    backgroundColor:'#1db954',
+    backgroundColor:'#ff0000',
     padding:10,
     borderRadius: 15, 
   },
@@ -97,6 +130,10 @@ const styles = StyleSheet.create({
   input :{
     height:50,
     color:'#FFFFFF'
-  }
+  },
+webView:{
+  marginTop: 20,
+  backgroundColor:'#212121'
+}
 });
 
