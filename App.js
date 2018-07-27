@@ -1,11 +1,18 @@
 import React from 'react';
-import { Platform , StyleSheet, Text, View , TextInput, TouchableOpacity,WebView} from 'react-native';
+import { Platform , StyleSheet, Text, View , TextInput, TouchableOpacity,WebView , Linking} from 'react-native';
 const cheerio = require('react-native-cheerio')
 
-
-
+const injectScript = ` (function () {
+    window.onclick = function(e) {
+      e.preventDefault();
+      window.postMessage(e.target.href);
+      e.stopPropagation()
+    }
+  }());`;
 export default class App extends React.Component {
   
+
+
   constructor(){
     super();
     this.state = {
@@ -26,8 +33,8 @@ queryAnghami(query){
  
  querySoundcloud(query){
 
-
-  let url = 'https://soundcloud.com/search?q=' + query;
+  query = query.split(' ').join('%20');
+  let url = 'https://m.soundcloud.com/search?q=' + query;
   this.setState({
     uri:url
   });
@@ -43,15 +50,20 @@ queryAnghami(query){
     uri:url
   });
  }
- 
-   
-   
-  
+
+ onMessage({ nativeEvent }) {
+  const data = nativeEvent.data;
+console.log(data);
+  if (data !== undefined && data !== null) {
+    Linking.openURL(data);
+  }
+}
   onChangeText(value){
     this.setState({
       query:value
     });
   }
+
   render() {
     return (
       
@@ -84,8 +96,13 @@ queryAnghami(query){
         
 
           <WebView
+          ref={(ref) => { this.webview = ref; }}
           source={{uri: this.state.uri }}
           style={styles.webView}
+          injectedJavaScript={injectScript}
+          javaScriptEnabledAndroid={true}
+          javaScriptEnabled={true}
+          onMessage={this.onMessage}
         />
         </View>
      
