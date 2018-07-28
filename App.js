@@ -86,11 +86,11 @@ console.log(data);
                 </View>
               </TouchableOpacity>
 
-            {/* <TouchableOpacity style={styles.tab3} onPress={()=>this.queryYoutube(this.state.query)}>
+             <TouchableOpacity style={styles.tab3} onPress={()=>this.queryYoutube(this.state.query)}>
                 <View > 
                   <Text style={styles.whiteText}> Youtube </Text>
                 </View>
-            </TouchableOpacity> */}
+            </TouchableOpacity> 
 
           </View>
         
